@@ -467,7 +467,7 @@ public class PatientSearchCriteria {
 	 * </pre>
 	 *
 	 * Except when the name provided is less than min characters (usually 3) then we will look for
-	 * an EXACT match by default
+	 * a match that STARTS WITH those characters
 	 *
 	 * @param name
 	 * @param matchExactly
@@ -508,13 +508,13 @@ public class PatientSearchCriteria {
 	private Criterion getCriterionForShortName(String name, boolean includeVoided) {
 		Criterion criterion = Restrictions.disjunction().add(
 		    Restrictions.conjunction().add(Restrictions.isNotNull("name.givenName")).add(
-		        Restrictions.eq("name.givenName", name).ignoreCase())).add(
+		        Restrictions.like("name.givenName", name, MatchMode.START).ignoreCase())).add(
 		    Restrictions.conjunction().add(Restrictions.isNotNull("name.middleName")).add(
-		        Restrictions.eq("name.middleName", name).ignoreCase())).add(
+		        Restrictions.like("name.middleName", name, MatchMode.START).ignoreCase())).add(
 		    Restrictions.conjunction().add(Restrictions.isNotNull("name.familyName")).add(
-		        Restrictions.eq("name.familyName", name).ignoreCase())).add(
+		        Restrictions.like("name.familyName", name, MatchMode.START).ignoreCase())).add(
 		    Restrictions.conjunction().add(Restrictions.isNotNull("name.familyName2")).add(
-		        Restrictions.eq("name.familyName2", name).ignoreCase()));
+		        Restrictions.like("name.familyName2", name, MatchMode.START).ignoreCase()));
 		
 		if (!includeVoided) {
 			return Restrictions.conjunction().add(Restrictions.eq("name.voided", false)).add(criterion);
